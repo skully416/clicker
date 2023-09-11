@@ -1,15 +1,222 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-  <h1>Clicker Game</h1>
-  <div id="score">0</div>
-  <button id="clickBtn">Click Me!</button>
-  <div id="autoclickers">0 Autoclickers</div>
-  <button id="buyBtn">Buy Autoclicker</button>
+  <style>body {
+  background-color: #f1f1f1;
+  font-family: Arial, sans-serif;
+}
 
-  <script src="script.js"></script>
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+.counter {
+  text-align: center;
+  font-size: 48px;
+  color: #333;
+  margin: 20px 0;
+}
+
+.autoclicker {
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.autoclicker input[type="checkbox"] {
+  display: none;
+}
+
+.autoclicker label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #337ab7;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.autoclicker label:hover {
+  background-color: #286090;
+}
+
+.autoclicker input[type="checkbox"]:checked + label {
+  background-color: #d9534f;
+}
+
+.autoclicker input[type="checkbox"]:checked + label:hover {
+  background-color: #c9302c;
+}</style>
+<script type="text/javascript">
+var totalClicks = 0;
+var autoclickerCPS = 0;
+var slowClickerCount = 0;
+var okayClickerCount = 0;
+var ultraClickerCount = 0;
+var hyperClickerCount = 0;
+var megaClickerCount = 0;
+var gigaClickerCount = 0;
+var extraordinaryClickerCount = 0;
+var penultimateClickerCount = 0;
+var oneClickerCount = 0;
+
+function saveGame() {
+    var saveData = {
+        totalClicks: totalClicks,
+        autoclickerCPS: autoclickerCPS,
+        slowClickerCount: slowClickerCount,
+        okayClickerCount: okayClickerCount,
+        ultraClickerCount: ultraClickerCount,
+        hyperClickerCount: hyperClickerCount,
+        megaClickerCount: megaClickerCount,
+        gigaClickerCount: gigaClickerCount,
+        extraordinaryClickerCount: extraordinaryClickerCount,
+        penultimateClickerCount: penultimateClickerCount,
+        oneClickerCount: oneClickerCount
+    };
+    document.cookie = "saveData=" + JSON.stringify(saveData);
+}
+
+function loadGame() {
+    var saveData = JSON.parse(getCookie("saveData"));
+    if (saveData !== null) {
+        totalClicks = saveData.totalClicks;
+        autoclickerCPS = saveData.autoclickerCPS;
+        slowClickerCount = saveData.slowClickerCount;
+        okayClickerCount = saveData.okayClickerCount;
+        ultraClickerCount = saveData.ultraClickerCount;
+        hyperClickerCount = saveData.hyperClickerCount;
+        megaClickerCount = saveData.megaClickerCount;
+        gigaClickerCount = saveData.gigaClickerCount;
+        extraordinaryClickerCount = saveData.extraordinaryClickerCount;
+        penultimateClickerCount = saveData.penultimateClickerCount;
+        oneClickerCount = saveData.oneClickerCount;
+    }
+}
+
+function getCookie(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieArray = decodedCookie.split(';');
+    for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i];
+        while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) == 0) {
+            return cookie.substring(name.length, cookie.length);
+        }
+    }
+    return null;
+}
+
+function buyClicker(clickerType, clickerCost, clickerCPS) {
+    if (totalClicks >= clickerCost) {
+        totalClicks -= clickerCost;
+        autoclickerCPS += clickerCPS;
+        switch (clickerType) {
+            case "slowClicker":
+                slowClickerCount++;
+                break;
+            case "okayClicker":
+                okayClickerCount++;
+                break;
+            case "ultraClicker":
+                ultraClickerCount++;
+                break;
+            case "hyperClicker":
+                hyperClickerCount++;
+                break;
+            case "megaClicker":
+                megaClickerCount++;
+                break;
+            case "gigaClicker":
+                gigaClickerCount++;
+                break;
+            case "extraordinaryClicker":
+                extraordinaryClickerCount++;
+                break;
+            case "penultimateClicker":
+                penultimateClickerCount++;
+                break;
+            case "oneClicker":
+                oneClickerCount++;
+                break;
+        }
+        saveGame();
+        updateDisplay();
+    }
+}
+
+function incrementScore() {
+    totalClicks += (1 + autoclickerCPS);
+    updateDisplay();
+}
+
+function updateDisplay() {
+    document.getElementById("totalClicks").innerHTML = totalClicks;
+    document.getElementById("autoclickerCPS").innerHTML = autoclickerCPS;
+    document.getElementById("slowClickerCount").innerHTML = slowClickerCount;
+    document.getElementById("okayClickerCount").innerHTML = okayClickerCount;
+    document.getElementById("ultraClickerCount").innerHTML = ultraClickerCount;
+    document.getElementById("hyperClickerCount").innerHTML = hyperClickerCount;
+    document.getElementById("megaClickerCount").innerHTML = megaClickerCount;
+    document.getElementById("gigaClickerCount").innerHTML = gigaClickerCount;
+    document.getElementById("extraordinaryClickerCount").innerHTML = extraordinaryClickerCount;
+    document.getElementById("penultimateClickerCount").innerHTML = penultimateClickerCount;
+    document.getElementById("oneClickerCount").innerHTML = oneClickerCount;
+}
+
+setInterval(incrementScore, 1000);
+</script>
+</head>
+<body onload="loadGame()">
+<h1>Monkegamer Clicker Game</h1>
+<p>
+Clicks: <span id="totalClicks">0</span><br>
+Autoclicking at <span id="autoclickerCPS">0</span> clicks per second (cps).
+</p>
+<p>
+<button onclick="buyClicker('slowClicker', 10, 1)">Buy Slow Clicker</button> x <span id="slowClickerCount">0</span> - Cost: 10 clicks<br>
+<button onclick="buyClicker('okayClicker', 50, 5)">Buy Okay Clicker</button> x <span id="okayClickerCount">0</span> - Cost: 50 clicks<br>
+<button onclick="buyClicker('ultraClicker', 500, 20)">Buy Ultra Clicker</button> x <span id="ultraClickerCount">0</span> - Cost: 500 clicks<br>
+<button onclick="buyClicker('hyperClicker', 5000, 100)">Buy Hyper Clicker</button> x <span id="hyperClickerCount">0</span> - Cost: 5000 clicks<br>
+<button onclick="buyClicker('megaClicker', 20000, 350)">Buy Mega Clicker</button> x <span id="megaClickerCount">0</span> - Cost: 20000 clicks<br>
+<button onclick="buyClicker('gigaClicker', 100000, 1000)">Buy Giga Clicker</button> x <span id="gigaClickerCount">0</span> - Cost: 100000 clicks<br>
+<button onclick="buyClicker('extraordinaryClicker', 500000, 6000)">Buy Extraordinary Clicker</button> x <span id="extraordinaryClickerCount">0</span> - Cost: 500000 clicks<br>
+<button onclick="buyClicker('penultimateClicker', 10000000, 50000)">Buy Penultimate Clicker</button> x <span id="penultimateClickerCount">0</span> - Cost: 10000000 clicks<br>
+<button onclick="buyClicker('oneClicker', 250000000, 1)">Buy The One Clicker To Rule Them All</button> x <span id="oneClickerCount">0</span> - Cost: 250000000 clicks<br>
+</p>
 </body>
 </html>
