@@ -1,51 +1,35 @@
-// Initialize variables
-let points = 0;
-let autoclickers = [
-    { name: "Basic Autoclicker", cps: 1, cost: 10 },
-    { name: "Advanced Autoclicker", cps: 5, cost: 50 },
-    { name: "Super Autoclicker", cps: 10, cost: 100 }
-];
+window.onload = function() {
+  var score = 0;
+  var autoclickers = 0;
 
-// Function to update the points display
-function updatePointsDisplay() {
-    document.getElementById("pointsDisplay").textContent = points;
-}
+  var scoreDisplay = document.getElementById("score");
+  var clickBtn = document.getElementById("clickBtn");
+  var autoclickersDisplay = document.getElementById("autoclickers");
+  var buyBtn = document.getElementById("buyBtn");
 
-// Function to update the autoclickers list
-function updateAutoclickersList() {
-    const autoclickersList = document.getElementById("autoclickersList");
-    autoclickersList.innerHTML = "";
+  clickBtn.onclick = function() {
+    score++;
+    updateDisplay();
+  };
 
-    autoclickers.forEach((autoclicker, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${autoclicker.name} (CPS: ${autoclicker.cps}) - Cost: ${autoclicker.cost} points`;
-        autoclickersList.appendChild(li);
+  buyBtn.onclick = function() {
+    var autoclickerCost = Math.floor(10 * Math.pow(1.1, autoclickers));
+    if (score >= autoclickerCost) {
+      autoclickers++;
+      score -= autoclickerCost;
+      updateDisplay();
+    }
+  };
 
-        // Add click event listener to buy autoclicker
-        li.addEventListener("click", () => {
-            if (points >= autoclicker.cost) {
-                points -= autoclicker.cost;
-                autoclicker.cost *= 2;
-                updatePointsDisplay();
-                updateAutoclickersList();
-                setInterval(() => {
-                    points += autoclicker.cps;
-                    updatePointsDisplay();
-                }, 1000);
-            }
-        });
-    });
-}
+  function updateDisplay() {
+    scoreDisplay.innerHTML = score;
+    autoclickersDisplay.innerHTML = autoclickers + " Autoclickers";
+  }
 
-// Function to handle button click
-function handleClick() {
-    points++;
-    updatePointsDisplay();
-}
+  function addScore() {
+    score += autoclickers;
+    updateDisplay();
+  }
 
-// Add click event listener to button
-document.getElementById("clickButton").addEventListener("click", handleClick);
-
-// Initialize the game
-updatePointsDisplay();
-updateAutoclickersList();
+  setInterval(addScore, 1000 / autoclickers);
+};
